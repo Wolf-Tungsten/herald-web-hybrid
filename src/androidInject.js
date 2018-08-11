@@ -1,4 +1,5 @@
 window.goto = path => {
+    console.log(path)
     window.router.push(path)
   }
   

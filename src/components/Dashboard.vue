@@ -102,6 +102,11 @@
         api.token = ''
       }
     },
+    created() {
+      setInterval(
+        ()=>{this.token = window.heraldToken}, 500
+      )
+    },
     computed: {
       isStudent() {
         return this.user && /生/.test(this.user.identity)
