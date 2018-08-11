@@ -7,25 +7,28 @@ import interceptor from './util/interceptor'
 import Toasted from 'vue-toasted'
 import Persist from 'vue-component-persist'
 
-if (window.navigator.standalone) {
-  window.__herald_env = 'webapp'
-} else if (window.__wxjs_environment === 'miniprogram') {
-  window.__herald_env = 'mina'
-} else if (/micromessenger/.test(window.navigator.userAgent.toLowerCase())) {
-  window.__herald_env = 'wx'
+//window.heraldToken = '03fea7b5a5491d133593e4b3837cd088ad9ad433' // 模拟token注入
 
-  // 微信环境下，为了隐藏前进后退按钮栏，在 router/index.js 中设置了 vue-router 的 mode 为 abstract
-  // 在这种模式下，vue-router 不会自动打开首页，需要手动调用 router.push('/') 打开首页。
-  // 注意不能用 replace，用 replace 将导致无法返回首页。
-  // 参考：https://github.com/vuejs/vue-router/issues/729
-  router.push('/')
+setInterval (()=>{console.log(window.heraldToken)}, 1000);
+// if (window.navigator.standalone) {
+//   window.__herald_env = 'webapp'
+// } else if (window.__wxjs_environment === 'miniprogram') {
+//   window.__herald_env = 'mina'
+// } else if (/micromessenger/.test(window.navigator.userAgent.toLowerCase())) {
+//   window.__herald_env = 'wx'
 
-  // 如果地址中包含某 hash，打开对应的页面，因为 abstract 模式不会处理地址 hash
-  let current = location.hash.replace(/^#/, '')
-  if (current && current !== '/') {
-    router.push(current)
-  }
-}
+//   // 微信环境下，为了隐藏前进后退按钮栏，在 router/index.js 中设置了 vue-router 的 mode 为 abstract
+//   // 在这种模式下，vue-router 不会自动打开首页，需要手动调用 router.push('/') 打开首页。
+//   // 注意不能用 replace，用 replace 将导致无法返回首页。
+//   // 参考：https://github.com/vuejs/vue-router/issues/729
+//   router.push('/')
+
+//   // 如果地址中包含某 hash，打开对应的页面，因为 abstract 模式不会处理地址 hash
+//   let current = location.hash.replace(/^#/, '')
+//   if (current && current !== '/') {
+//     router.push(current)
+//   }
+// }
 
 Vue.config.productionTip = false
 
@@ -63,3 +66,5 @@ new Vue({
   template: '<App/>',
   components: { App }
 })
+
+window.router = router //将router绑定到全局

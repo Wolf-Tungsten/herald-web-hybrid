@@ -1,8 +1,7 @@
 <template lang='pug'>
   .tab
-    dashboard(v-if='checkLogin' :user='user')
-    login(v-else)
-    .todo(v-if='checkLogin')
+    dashboard(:user='user')
+    .todo
       exam(v-if='/^21/.test(user.cardnum)')
       curriculum
       experiment(v-if='/^21/.test(user.cardnum)')
@@ -17,35 +16,20 @@
   import api from '@/api'
 
   export default {
-    props: ['user'],
     components: {
       login, dashboard, curriculum, experiment, exam
     },
     data () {
       return {
-        checkLogin: true
+        user:{}
       }
     },
     async created () {
         let that = this
-        setInterval(() => {
-          try {
-          if (api.token) {
-            if (that.user) {
-              that.checkLogin = true
-            } else {
-              that.checkLogin = false
-            }
-          } else {
-            that.checkLogin = false
-          }
-          } catch(e) {
-            that.checkLogin = false
-          }
-        }, 1000)
+        this.user = await api.get('/api/user')
+        this.user.admin = await api.get('/api/admin/admin')
     },
     methods: {
-
     }
   }
 </script>

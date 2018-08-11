@@ -19,19 +19,32 @@ import AdminBanner from '@/pages/admin/Banner'
 import AdminActivity from '@/pages/admin/Activity'
 import Laundry from '@/pages/Laundry'
 import Download from '@/pages/Download'
+import TabHome from '@/base/TabHome'
+import TabDiscover from '@/base/TabDiscover'
+import TabNotice from '@/base/TabNotice'
 
 Vue.use(Router)
 
 // 微信环境下，为隐藏前进后退按钮栏，设置 mode 为 abstract，实现完全不产生浏览器历史
-let isWeixin = /micromessenger/.test(window.navigator.userAgent.toLowerCase()) && window.__wxjs_environment !== 'miniprogram'
+// let isWeixin = /micromessenger/.test(window.navigator.userAgent.toLowerCase()) && window.__wxjs_environment !== 'miniprogram'
 
 export default new Router({
-  mode: isWeixin ? 'abstract' : 'hash',
+  mode:'history',
   routes: [
     {
-      path: '/',
+      path: '/home-tab',
       name: '首页',
-      component: Index
+      component: TabHome
+    },
+    {
+      path: '/activity-tab',
+      name: '活动',
+      component: TabDiscover
+    },
+    {
+      path: '/notification-tab',
+      name: '通知',
+      component: TabNotice
     },
     {
       path: '/intro',

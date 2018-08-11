@@ -2,6 +2,9 @@ import cookie from 'js-cookie'
 import axios from 'axios'
 import Vue from 'vue'
 import qs from 'querystring'
+import { resolve } from 'url';
+
+const sleep = t => new Promise ( r => setTimeout(r, t) ) 
 
 // 用 Vue 做一个状态机来充当 api 接口
 export default new Vue({
@@ -14,14 +17,15 @@ export default new Vue({
     })
   },
   created() {
-    this.axios.defaults.headers.token = this.token = cookie.get('herald-default-token')
-    // 更新 token 失效时间
-    cookie.set('herald-default-token', this.token || '', { expires: 60 })
+    let that = this
+    // 定时刷新token
+    setInterval( ()=>{
+      that.axios.defaults.headers.token = that.token = window.heraldToken
+    }, 1000);
   },
   watch: {
     token() {
       this.axios.defaults.headers.token = this.token
-      cookie.set('herald-default-token', this.token || '', { expires: 60 })
     }
   },
   computed: {
@@ -31,17 +35,33 @@ export default new Vue({
   },
   methods: {
     async get(route = '/', data = {}) {
+      while(!window.heraldToken){
+        await sleep(500)
+      } // token 不存在时睡0.5s再来请求
+      this.axios.defaults.headers.token = this.token = window.heraldToken
       let params = qs.stringify(data)
       if (params) params = '?' + params
       return this.handleResponse(await this.axios.get(route + params))
     },
     async post(route = '/', data = {}) {
+      while(!window.heraldToken){
+        await sleep(500)
+      } // token 不存在时睡0.5s再来请求
+      this.axios.defaults.headers.token = this.token = window.heraldToken
       return this.handleResponse(await this.axios.post(route, data))
     },
     async put(route = '/', data = {}) {
+      while(!window.heraldToken){
+        await sleep(500)
+      } // token 不存在时睡0.5s再来请求
+      this.axios.defaults.headers.token = this.token = window.heraldToken
       return this.handleResponse(await this.axios.put(route, data))
     },
     async delete(route = '/', data = {}) {
+      while(!window.heraldToken){
+        await sleep(500)
+      } // token 不存在时睡0.5s再来请求
+      this.axios.defaults.headers.token = this.token = window.heraldToken
       let params = qs.stringify(data)
       if (params) params = '?' + params
       return this.handleResponse(await this.axios.delete(route + params))

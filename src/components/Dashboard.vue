@@ -3,7 +3,8 @@
   .widget.dashboard
     .info-container
       .name {{ user ? user.name : '加载中' }}
-      .identity {{ user ? user.identity : '…' }}
+      //.identity {{ user ? user.identity : '…' }}
+      .identity {{token}}
         router-link(v-if='user.isNewbie' to='/intro') 新生指引 ＞
       img.icon(@click='logout()' :src='logoutImg')
     
@@ -75,7 +76,8 @@
         srtp: null,
         lecture: null,
         library: null,
-        logoutImg
+        logoutImg,
+        token:window.heraldToken
       }
     },
     persist: {

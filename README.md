@@ -1,6 +1,10 @@
-# herald-web
+# herald-web-hybrid
 
-小猴偷米 Web (PWA) 项目
+基于 **小猴偷米 Web (PWA) 项目** 发展的 Hybrid App 内核
+
+## 项目宗旨
+
+在 小猴偷米 Web 项目试水一个学期后，我们看到了 Web 带来的快速开发、快速迭代的极大优势。 但考虑到用户体验，使用纯 Web 项目仍具有一定的弊端。现在，我们将以 herald-web 项目为蓝本出发，生产一套Hybrid App，借助原生 App 的开发补偿 Web 开发的短板，并最终取代原有 App 产品线。
 
 ## 开发
 

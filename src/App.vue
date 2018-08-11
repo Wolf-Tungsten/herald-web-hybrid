@@ -1,29 +1,6 @@
 <template lang='pug'>
   #app(:class='env' v-loading='isLoading')
-    .app-container
-      //- base-page 为手机版底部界面，桌面版左侧栏
-      .base-page
-        .base-header
-          router-link.live2d-wrapper(to='/')
-            .live2d-container
-              live2d
-            img.logo(:src='logoImg')
-          .spacing
-          router-link(to='/download')
-            img.download(:src='downloadImg')
-        seuLogin(:is-loading='isLoading')
-        tabs(:user='user')
-
-      //- overlay-page 为手机版上层栈，桌面版右侧栏
-      .overlay-page(:class='{ home: isHome }' ref='page')
-        .overlay-header
-          transition(name='slide')
-            .title-bar(v-if='!isHome')
-              .back(@click='$router.go(-1)') ‹ 
-              .current {{ title }}
-        scrollView.overlay-router(:style='"--mouse-x: " + mouseX + "px; --mouse-y: " + mouseY + "px"')
-          transition(name='page')
-            router-view(:user='user')
+    router-view(:user='user')
 </template>
 
 <script>
@@ -35,31 +12,6 @@
   import api from './api'
   import router from './router'
   import tabs from './base/Tabs.vue'
-  import live2d from './components/Live2D.vue'
-  import seuLogin from './components/SeuLogin.vue'
-  import scrollView from './components/ScrollView.vue'
-
-  import logoImg from 'static/images/logo.png'
-  import downloadImg from 'static/images/download.png'
-
-  function getOffsetTop(obj){
-    let tmp = obj.offsetTop - obj.scrollTop;
-    let val = obj.offsetParent;
-    while (val){
-      tmp += val.offsetTop - val.scrollTop;
-      val = val.offsetParent;
-    }
-    return tmp;
-  }
-  function getOffsetLeft(obj){
-    let tmp = obj.offsetLeft - obj.scrollLeft;
-    let val = obj.offsetParent;
-    while (val){
-      tmp += val.offsetLeft - val.scrollLeft;
-      val = val.offsetParent;
-    }
-    return tmp;
-  }
 
   // 注册 Service Worker
   // Service Worker 由 parcel-plugin-sw-cache 包自动生成
@@ -73,7 +25,6 @@
   export default {
     name: 'app',
     components: { 
-      live2d, tabs, seuLogin, scrollView
     },
     data() {
       return {
@@ -81,67 +32,13 @@
         env: window.__herald_env,
         isLoading: false,
         title: '',
-        isHome: true,
-        mouseX: 0,
-        mouseY: 0,
-        logoImg,
-        downloadImg
+        isHome: true
       }
     },
     persist: {
       user: 'herald-default-user'
     },
     async created() {
-      this.title = this.$route.name
-      this.isHome = this.$route.path === '/'
-      
-      // 请求计数，有请求正在处理则显示加载态
-      // 注意根据 Xhook 要求，before handler 参数个数必须是 1，after handler 参数个数必须是 2，不能省略
-      let requests = 0
-      xhook.before((req) => {
-        requests++ || (this.isLoading = true)
-      })
-      xhook.after((req, res) => {
-        --requests || (this.isLoading = false)
-      })
-
-      // 套壳用，通过 URL 参数导入 token
-      if (/importToken=([0-9a-fA-F]+)/.test(location.search)) {
-        api.token = RegExp.$1
-        if (location.search) {
-          location.search = ''
-        }
-      } else {
-        let onLogin = async () => {
-          let user = await api.get('/api/user')
-          user.admin = await api.get('/api/admin/admin')
-          if (user.admin && user.admin.super) {
-            location.href = '#/admin'
-          }
-          this.user = user
-        }
-
-        let onLogout = async () => {
-          this.user = null
-          location.href = '#/'
-        }
-        
-        if (api.token) await onLogin()
-        api.$watch('token', token => token ? onLogin() : onLogout())
-      }
-    },
-    mounted() {
-      let el = this.$refs.page;
-      ['touchstart', 'mouseup'].map(k => document.addEventListener(k, ev => {
-        this.mouseX = (ev.clientX || ev.touches && ev.touches[0].clientX) - getOffsetLeft(el)
-        this.mouseY = (ev.clientY || ev.touches && ev.touches[0].clientY) - getOffsetTop(el)
-      }))
-    },
-    watch: {
-      '$route' (to, from) {
-        this.title = to.name
-        this.isHome = to.path === '/'
-      }
     }
   }
 </script>
@@ -198,7 +95,6 @@
     margin 0
     padding 0
     background #fff
-    overflow hidden
 
   p, input, textarea
     margin-top 0
@@ -388,7 +284,6 @@
       bottom env(safe-area-inset-bottom)
       display flex
       flex-direction row
-      overflow hidden
 
       @media screen and (max-width: 600px)
         display block
@@ -438,7 +333,6 @@
         width 40%
         min-width 320px
         max-width 400px
-        overflow hidden
         display flex
         flex-direction column
 
