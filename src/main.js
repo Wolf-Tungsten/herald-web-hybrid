@@ -7,9 +7,13 @@ import interceptor from './util/interceptor'
 import Toasted from 'vue-toasted'
 import Persist from 'vue-component-persist'
 
-//window.heraldToken = '03fea7b5a5491d133593e4b3837cd088ad9ad433' // 模拟token注入
+// 定时检查token情况
+setInterval (()=>{
+  if(!window.heraldToken){
+    window.heraldToken = hybrid.getToken()
+  }
+}, 1000);
 
-setInterval (()=>{console.log(window.heraldToken)}, 1000);
 // if (window.navigator.standalone) {
 //   window.__herald_env = 'webapp'
 // } else if (window.__wxjs_environment === 'miniprogram') {

@@ -1,7 +1,6 @@
 <template lang="pug">
 
-  router-link(:to='route' ondragstart='return false')
-    .dashboard-item(:class='{ stale: isStale }')
+    .dashboard-item(:class='{ stale: isStale }' ondragstart='return false' @click="pushRoute()")
       .name {{ name }}
       .value {{ value != null ? value : '···' }}
 
@@ -9,9 +8,15 @@
 <script>
 
   export default {
-    props: ['name', 'value', 'isStale', 'route'],
+    props: ['name', 'value', 'isStale', 'route', 'title'],
     data() {
       return {}
+    },
+
+    methods:{
+      pushRoute() {
+        hybrid.pushRoute(this.route, this.title)
+      }
     }
   }
 

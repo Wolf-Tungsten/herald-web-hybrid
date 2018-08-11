@@ -4,7 +4,7 @@
     .info-container
       .name {{ user ? user.name : '加载中' }}
       //.identity {{ user ? user.identity : '…' }}
-      .identity {{token}}
+      .identity {{ user ? user.identity: '...'}}
         router-link(v-if='user.isNewbie' to='/intro') 新生指引 ＞
       img.icon(@click='logout()' :src='logoutImg')
     
@@ -24,36 +24,43 @@
       item(name='余额' 
         :value='card && card.info && card.info.balance' 
         :is-stale='card && card.isStale' 
-        route='/card')
+        route='/card'
+        title='一卡通'
+        )
 
       item(name='跑操' 
         :value='pe && pe.count' 
         :is-stale='pe && pe.isStale' 
         route='/pe' 
-        v-if='isUndergraduate')
+        title='跑操查询'
+        v-if='!isUndergraduate')
 
       item(name='讲座' 
         :value='lecture && lecture.length' 
         :is-stale='lecture && lecture.isStale' 
         route='/lecture' 
-        v-if='isUndergraduate')
+        title='人文讲座'
+        v-if='!isUndergraduate')
 
       item(name='SRTP' 
         :value='srtp && srtp.info.points' 
         :is-stale='srtp && srtp.isStale' 
         route='/srtp' 
-        v-if='isUndergraduate')
+        title='SRTP查询'
+        v-if='!isUndergraduate')
 
       item(:name='isGraduate ? "成绩" : "绩点"' 
         :value='gpa && (gpa.gpa || gpa.score || "暂无")' 
         :is-stale='gpa && gpa.isStale'
         route='/grade' 
         v-if='isStudent' 
+        title='绩点查询与估算'
         :is-graduate='isGraduate')
 
       item(name='借书'
         :value='library && library.length'
         :is-stale='library && library.isStale'
+        title='图书馆'
         route='/library') 
 
 </template>
@@ -88,7 +95,7 @@
       lecture: 'herald-default-lecture',
       library: 'herald-default-library'
     },
-    async created() {
+    created() {
       // 下列不能用 await，否则前面的语句会阻塞后面的语句，前面的异常会阻止后面的语句
       api.get('/api/pe').then(res => this.pe = res)
       api.get('/api/gpa').then(res => this.gpa = res)
@@ -99,23 +106,19 @@
     },
     methods: {
       logout() {
-        api.token = ''
-      }
-    },
-    created() {
-      setInterval(
-        ()=>{this.token = window.heraldToken}, 500
-      )
+        hybrid.authFail()
+      },
+
     },
     computed: {
       isStudent() {
-        return this.user && /生/.test(this.user.identity)
+        return !(this.user && /生/.test(this.user.identity))
       },
       isUndergraduate() {
-        return this.user && /本科/.test(this.user.identity)
+        return !(this.user && /本科/.test(this.user.identity))
       },
       isGraduate() {
-        return this.isStudent && !this.isUndergraduate
+        return !(this.isStudent && !this.isUndergraduate)
       }
     }
   }
