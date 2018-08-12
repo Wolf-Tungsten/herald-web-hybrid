@@ -3,7 +3,8 @@
   .notice-page
     .markdown-container(v-if='markdown' v-html='markdown')
     .markdown-container(v-else) 加载中…
-
+    p.origin-url(v-if="url" @click="open") 文件无法下载？在浏览器中打开原文✨
+    
 </template>
 <script>
 
@@ -15,7 +16,8 @@
   export default {
     data() {
       return {
-        markdown: ''
+        markdown: '',
+        url: ''
       }
     },
     created() {
@@ -34,6 +36,7 @@
           let { nid, url } = this.$route.params
           if (url) {
             url = decodeURIComponent(url)
+            this.url = url
           }
           this.loadOther({ nid, url })
         }
@@ -45,6 +48,11 @@
       async loadCompetition(id) {
         let res = await api.post('/api/srtp/competition', { id })
         this.markdown = marked(res)
+      },
+      open() {
+        if(android){
+          android.openURLinBrowser(this.url)
+        }
       }
     }
   }
@@ -52,6 +60,16 @@
 </script>
 <style lang="stylus">
   .notice-page
+
+    .origin-url
+      color #13b4d9
+      text-align center
+      padding-top 10px
+      padding-bottom 20px
+      border-style soild
+      border-top-width 1px
+      border-top-color #000
+
 
     .markdown-container
       border-top 0.5px solid transparent

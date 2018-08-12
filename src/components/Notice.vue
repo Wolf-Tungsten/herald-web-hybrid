@@ -6,7 +6,7 @@
         .title {{ site }}
     ul.detail-list
       li(v-for='item in filteredNotice' :key='item.title' :class='{ important: item.isImportant }')
-        notice-link(:notice='item')
+        div(@click='viewLink(item)')
           .top
             .left
               .tag.important(v-if='item.isImportant') 重要
@@ -25,27 +25,28 @@
   import formatter from '@/util/formatter'
   import markdown from '@/components/Markdown'
 
-  const RouterLink = Vue.component('router-link')
-  const NoticeLink = {
-    props: ['notice'],
-    render() {
-      let slot = this.$slots.default
-      if (this.notice.isAttachment) {
-        return <a href={ this.notice.url }>{ slot }</a>
-      }
-      if (this.notice.site === 'SRTP') {
-        return <RouterLink to={ '/notice/competition/' + this.notice.srtpId }>{ slot }</RouterLink>
-      }
-      if (this.notice.nid != null) {
-        return <RouterLink to={ '/notice/' + this.notice.nid }>{ slot }</RouterLink>
-      }
-      return <RouterLink to={ '/notice/url/' + encodeURIComponent(this.notice.url) }>{ slot }</RouterLink>
-    }
-  }
+  // const RouterLink = Vue.component('router-link')
+  // const NoticeLink = {
+  //   props: ['notice'],
+  //   render() {
+  //     let slot = this.$slots.default
+  //     if (this.notice.isAttachment) {
+  //       return <a href={ this.notice.url }>{ slot }</a>
+  //     }
+  //     if (this.notice.site === 'SRTP') {
+  //       return <RouterLink to={ '/notice/competition/' + this.notice.srtpId }>{ slot }</RouterLink>
+  //     }
+  //     if (this.notice.nid != null) {
+  //       return <RouterLink to={ '/notice/' + this.notice.nid }>{ slot }</RouterLink>
+  //     }
+  //     return <RouterLink to={ '/notice/url/' + encodeURIComponent(this.notice.url) }>{ slot }</RouterLink>
+  //   },
+  //   methods
+  // }
 
   export default {
     props: ['user'],
-    components: { markdown, 'notice-link': NoticeLink },
+    components: { markdown },
     data() {
       return {
         notice: [],
@@ -102,14 +103,18 @@
         }))).sort((a, b) => b.time - a.time)
       },
       viewLink(notice) {
+        let route
         if (notice.isAttachment) {
-          return ''
+          route = ''
         } else if (notice.site === 'SRTP') {
-          return '/notice/competition/' + notice.srtpId
+          route = '/notice/competition/' + notice.srtpId
         } else if (notice.nid != null) {
-          return '/notice/' + notice.nid
+          route = '/notice/' + notice.nid
         } else {
-          return '/notice/url/' + encodeURIComponent(notice.url)
+          route = '/notice/url/' + encodeURIComponent(notice.url)
+        }
+        if (android) {
+          android.pushRoute(route, '通知公告')
         }
       }
     }

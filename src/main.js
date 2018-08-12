@@ -10,7 +10,7 @@ import Persist from 'vue-component-persist'
 // 定时检查token情况
 setInterval (()=>{
   if(!window.heraldToken){
-    window.heraldToken = hybrid.getToken()
+    window.heraldToken = android.getToken()
   }
 }, 1000);
 

@@ -53,7 +53,7 @@
         :value='gpa && (gpa.gpa || gpa.score || "暂无")' 
         :is-stale='gpa && gpa.isStale'
         route='/grade' 
-        v-if='isStudent' 
+        v-if='!isStudent' 
         title='绩点查询与估算'
         :is-graduate='isGraduate')
 
@@ -83,8 +83,7 @@
         srtp: null,
         lecture: null,
         library: null,
-        logoutImg,
-        token:window.heraldToken
+        logoutImg
       }
     },
     persist: {
@@ -106,7 +105,7 @@
     },
     methods: {
       logout() {
-        hybrid.authFail()
+        android.authFail()
       },
 
     },

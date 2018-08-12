@@ -5,17 +5,22 @@
 
 <script>
   import notice from '@/components/Notice.vue'
-
+  import api from '@/api'
   export default {
-    props: ['user'],
     components: {
       notice
     },
     data () {
-      return {}
+      return {
+        user:{}
+      }
+    },
+    presist:{
+      user:'herald-default-user'
     },
     async created () {
-
+      let that = this
+      this.user = await api.get('/api/user')
     },
     methods: {
 

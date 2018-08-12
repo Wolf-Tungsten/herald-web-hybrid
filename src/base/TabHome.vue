@@ -1,5 +1,6 @@
 <template lang='pug'>
   .tab
+    banner
     dashboard(:user='user')
     .todo
       exam(v-if='/^21/.test(user.cardnum)')
@@ -13,16 +14,20 @@
   import dashboard from '@/components/Dashboard.vue'
   import curriculum from '@/components/Curriculum.vue'
   import experiment from '@/components/Experiment.vue'
+  import banner from '@/components/Banner.vue'
   import api from '@/api'
 
   export default {
     components: {
-      login, dashboard, curriculum, experiment, exam
+      login, dashboard, curriculum, experiment, exam, banner
     },
     data () {
       return {
         user:{}
       }
+    },
+    presist:{
+      user:'herald-default-user'
     },
     async created () {
         let that = this

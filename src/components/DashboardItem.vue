@@ -15,7 +15,7 @@
 
     methods:{
       pushRoute() {
-        hybrid.pushRoute(this.route, this.title)
+        android.pushRoute(this.route, this.title)
       }
     }
   }
