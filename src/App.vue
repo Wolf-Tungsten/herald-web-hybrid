@@ -523,6 +523,7 @@
         color var(--color-primary-dark)
         background var(--color-primary-bg)
         border-radius 3px
+        align-items center
 
         .title
           font-weight bold

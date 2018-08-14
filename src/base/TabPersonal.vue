@@ -73,7 +73,7 @@ import { anyTypeAnnotation } from 'babel-types';
         }
       },
       updateKernel() {
-        if (android) {
+        if (android) {       
           console.log('清除内核')
           android.clearCache()
         }

@@ -105,16 +105,20 @@
       viewLink(notice) {
         let route
         if (notice.isAttachment) {
-          route = ''
-        } else if (notice.site === 'SRTP') {
-          route = '/notice/competition/' + notice.srtpId
-        } else if (notice.nid != null) {
-          route = '/notice/' + notice.nid
+          if (android) {
+            android.openURLinBrowser(notice.url)
+          }
         } else {
-          route = '/notice/url/' + encodeURIComponent(notice.url)
-        }
-        if (android) {
-          android.pushRoute(route, '通知公告')
+          if (notice.site === 'SRTP') {
+            route = '/notice/competition/' + notice.srtpId
+          } else if (notice.nid != null) {
+            route = '/notice/' + notice.nid
+          } else {
+            route = '/notice/url/' + encodeURIComponent(notice.url)
+          }
+          if (android) {
+            android.pushRoute(route, '通知公告')
+          }
         }
       }
     }
