@@ -2,7 +2,7 @@
   .tab
     banner
     dashboard(:user='user')
-    .widget(v-if="needUpload")
+    .widget(v-if="needUpdate")
       .haveUpload(@click="downloadApk")
         .red-dot
         span.text 发现新版本，点击下载安装
@@ -30,7 +30,7 @@
     data () {
       return {
         user:null,
-        needUpload: false
+        needUpdate: false
       }
     },
     presist:{

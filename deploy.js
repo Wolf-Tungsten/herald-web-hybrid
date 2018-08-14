@@ -65,8 +65,9 @@ function findSync(startPath) {
 }
 
 const filesToUpload = findSync('./dist')
-const formUploader = new qiniu.form_up.FormUploader(qiniuConfig);
+
 filesToUpload.forEach( (localFile) => {
+    let formUploader = new qiniu.form_up.FormUploader(qiniuConfig);
     let name = localFile.split('/')[1]
     let putExtra = new qiniu.form_up.PutExtra();
     formUploader.putFile(uploadToken, name, localFile, putExtra, function(respErr,

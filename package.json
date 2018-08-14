@@ -8,7 +8,7 @@
   "scripts": {
     "dev": "parcel index.html --port 8080",
     "build": "rm -rf ./dist && parcel build index.html",
-    "deploy": "npm run build && node ./deploy.js"
+    "deploy": "node ./deploy.js"
   },
   "dependencies": {
     "axios": "^0.16.2",
