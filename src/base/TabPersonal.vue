@@ -6,13 +6,13 @@
         //.identity {{ user ? user.identity : '…' }}
         .identity 东南大学{{ user ? user.identity: '...'}}
       .operator-container
-        .operator
+        .operator(@click='updateKernel()')
           .text 更新内核
-          img.icon(@click='updateKernel()' :src='downloadImg')
+          img.icon(:src='downloadImg')
         .divider
-        .operator
+        .operator(@click='logout()' )
           .text 退出登陆
-          img.icon(@click='logout()' :src='logoutImg')
+          img.icon(:src='logoutImg')
     
     .applet-container
       .applet(@click='pushRoute("/intro", "新生指引")')
@@ -153,8 +153,7 @@ import { anyTypeAnnotation } from 'babel-types';
       align-items stretch
 
       .applet
-        padding 10px 0
-        margin 0 15px
+        padding 10px 15px
         border-bottom solid 1px var(--color-divider)
         display flex
         align-items center
