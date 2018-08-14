@@ -1,24 +1,6 @@
 <template lang='pug'>
 
   .widget.dashboard
-    .info-container
-      .name {{ user ? user.name : '加载中' }}
-      //.identity {{ user ? user.identity : '…' }}
-      .identity {{ user ? user.identity: '...'}}
-        router-link(v-if='user.isNewbie' to='/intro') 新生指引 ＞
-      img.icon(@click='logout()' :src='logoutImg')
-    
-    .admin-container(v-if='user.admin')
-      router-link(to='/admin/monitor' v-if='user.admin.maintenance')
-        .function 概况
-      router-link(to='/admin/privilege' v-if='user.admin.maintenance')
-        .function 权限
-      router-link(to='/admin/notice' v-if='user.admin.maintenance')
-        .function 通知
-      router-link(to='/admin/banner' v-if='user.admin.publicity')
-        .function 轮播管理
-      router-link(to='/admin/activity' v-if='user.admin.publicity')
-        .function 活动管理
 
     .dashboard-container(v-if='user')
       item(name='余额' 
@@ -165,8 +147,6 @@
       overflow-x: scroll
       box-sizing: border-box
       text-align: center
-      border-top 0.5px solid var(--color-divider)
-      padding-top 20px
       
       ::-webkit-scrollbar
         display none

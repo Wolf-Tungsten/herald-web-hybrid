@@ -48,6 +48,10 @@
   @import 'element-ui/lib/theme-chalk/index.css'
 </style>
 <style lang='stylus'>
+
+  ::-webkit-scrollbar
+    width:0
+
   :root
     --color-text-regular   #333333
     --color-text-bold      #555555
