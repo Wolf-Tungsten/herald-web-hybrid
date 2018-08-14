@@ -22,6 +22,7 @@ import Download from '@/pages/Download'
 import TabHome from '@/base/TabHome'
 import TabDiscover from '@/base/TabDiscover'
 import TabNotice from '@/base/TabNotice'
+import TabPersonal from '@/base/TabPersonal'
 
 Vue.use(Router)
 
@@ -29,7 +30,7 @@ Vue.use(Router)
 // let isWeixin = /micromessenger/.test(window.navigator.userAgent.toLowerCase()) && window.__wxjs_environment !== 'miniprogram'
 
 export default new Router({
-  mode:'history',
+  mode:'hash',
   routes: [
     {
       path: '/home-tab',
@@ -45,6 +46,11 @@ export default new Router({
       path: '/notification-tab',
       name: '通知',
       component: TabNotice
+    },
+    {
+      path: '/personal-tab',
+      name: '个人',
+      component: TabPersonal
     },
     {
       path: '/intro',
@@ -148,7 +154,11 @@ export default new Router({
     },
     {
       path: '*',
-      redirect: '/'
+      redirect: '/home-tab'
+    },
+    {
+      path: '/',
+      redirect: '/home-tab'
     }
   ]
 })

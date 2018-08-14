@@ -3,9 +3,9 @@
     banner
     dashboard(:user='user')
     .todo
-      exam(v-if='/^21/.test(user.cardnum)')
+      exam(v-if='user && /^21/.test(user.cardnum)')
       curriculum
-      experiment(v-if='/^21/.test(user.cardnum)')
+      experiment(v-if='user && /^21/.test(user.cardnum)')
 </template>
 
 <script>
@@ -18,21 +18,18 @@
   import api from '@/api'
 
   export default {
+    props:['user'],
     components: {
       login, dashboard, curriculum, experiment, exam, banner
     },
     data () {
       return {
-        user:{}
+        user:null
       }
     },
     presist:{
-      user:'herald-default-user'
     },
-    async created () {
-        let that = this
-        this.user = await api.get('/api/user')
-        this.user.admin = await api.get('/api/admin/admin')
+    created () {
     },
     methods: {
     }

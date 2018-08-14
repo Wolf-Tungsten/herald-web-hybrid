@@ -6,6 +6,7 @@ import router from './router'
 import interceptor from './util/interceptor'
 import Toasted from 'vue-toasted'
 import Persist from 'vue-component-persist'
+import { Main } from '../node_modules/element-ui';
 
 // 定时检查token情况
 setInterval (()=>{
@@ -63,12 +64,13 @@ Vue.toasted.show = (text, ...args) => {
 }
 
 // router.afterEach(route => document.title = '小猴偷米' + (route.name ? '丨' + route.name : ''))
+window.router = router
 
-new Vue({
+let app = new Vue({
   el: '#app',
   router,
   template: '<App/>',
   components: { App }
 })
 
-window.router = router //将router绑定到全局
+
