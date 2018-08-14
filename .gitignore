@@ -13,3 +13,4 @@ yarn.lock
 dist
 dist-tmp
 hybrid
+qiniu.json

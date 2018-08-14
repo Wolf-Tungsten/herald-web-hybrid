@@ -12,7 +12,7 @@
           img.icon(:src='downloadImg')
         .divider
         .operator(@click='logout()' )
-          .text 退出登陆
+          .text 退出登录
           img.icon(:src='logoutImg')
     
     .applet-container
@@ -25,11 +25,18 @@
         img.icon(:src='appletCourseStatImg')
         .text 课表预测
         img.go-icon(:src='goImg')
+
+      .applet(@click='schoolCalendar()')
+        img.icon(:src='appletSchoolCalenderImg')
+        .text 2018-2019 校历
+        img.go-icon(:src='goImg')
       
       .applet.end(@click='pushRoute("/laundry", "洗衣房")')
         img.icon(:src='appletLaundryImg')
         .text 洗衣房查询
         img.go-icon(:src='goImg')
+
+        
 
   
 
@@ -45,10 +52,10 @@
   import appletIntroImg from 'static/images/applet-intro.png'
   import appletLaundryImg from 'static/images/applet-laundry.png'
   import appletCourseStatImg from 'static/images/applet-course-stat.png'
-import { anyTypeAnnotation } from 'babel-types';
+  import appletSchoolCalenderImg from 'static/images/applet-school-calendar.png'
 
   export default {
-    props:['user'],
+    props:['user','versionInfo'],
     components: {
 
     },
@@ -60,7 +67,7 @@ import { anyTypeAnnotation } from 'babel-types';
         appletIntroImg,
         appletLaundryImg,
         appletCourseStatImg,
-        versionInfo:{},
+        appletSchoolCalenderImg,
         needUpdate:false
       }
     },
@@ -68,6 +75,11 @@ import { anyTypeAnnotation } from 'babel-types';
       pushRoute(route, title) {
         if (android) {
           android.pushRoute(route, title)
+        }
+      },
+      schoolCalendar(){
+        if(android) {
+          android.openURLinBrowser('http://jwc.seu.edu.cn/_upload/article/images/97/ba/7bae1a694170b4ecb46a409d7eba/7934c5dc-81cf-4576-ba93-7ecb415b3b8e.jpg')
         }
       },
       logout() {
@@ -96,7 +108,6 @@ import { anyTypeAnnotation } from 'babel-types';
       }
     },
     async created() {
-      this.versionInfo = await api.get('/api/version')
       if (window.versionCode < parseInt(this.versionInfo['hybrid-kernel'])) {
         this.needUpdate = true
       }

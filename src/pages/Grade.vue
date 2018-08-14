@@ -190,8 +190,6 @@
     line-height 1.5em
 
   .info-bar.predict
-    position sticky
-    position -webkit-sticky
     top 0
     z-index 99999
     background rgba(#fff, .8)

@@ -1,6 +1,6 @@
 <template lang='pug'>
   #app(:class='env' v-loading='isLoading')
-    router-view(:user='user')
+    router-view(:user='user' :versionInfo='versionInfo')
 </template>
 
 <script>
@@ -23,7 +23,8 @@
         env: window.__herald_env,
         isLoading: false,
         title: '',
-        isHome: true
+        isHome: true,
+        versionInfo: null
       }
     },
     persist: {
@@ -32,6 +33,7 @@
     async created() {
         this.user = await api.get('/api/user')
         this.user.admin = await api.get('/api/admin/admin')
+        this.versionInfo = await api.get('/api/version')
     }
   }
 </script>

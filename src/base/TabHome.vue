@@ -2,6 +2,10 @@
   .tab
     banner
     dashboard(:user='user')
+    .widget(v-if="needUpload")
+      .haveUpload(@click="downloadApk")
+        .red-dot
+        span.text 发现新版本，点击下载安装
     .todo
       exam(v-if='user && /^21/.test(user.cardnum)')
       curriculum
@@ -16,22 +20,55 @@
   import experiment from '@/components/Experiment.vue'
   import banner from '@/components/Banner.vue'
   import api from '@/api'
+  import goImg from 'static/images/go.png'
 
   export default {
-    props:['user'],
+    props:['user', 'versionInfo'],
     components: {
-      login, dashboard, curriculum, experiment, exam, banner
+      login, dashboard, curriculum, experiment, exam, banner, goImg
     },
     data () {
       return {
-        user:null
+        user:null,
+        needUpload: false
       }
     },
     presist:{
     },
     created () {
+      if (android.getVersionCode() < parseInt(this.versionInfo['android'])) {
+        this.needUpdate = true
+      }
+      if (!android.getVersionCode){
+        this.needUpdate = true
+      }
     },
     methods: {
+      downloadApk() {
+        if (android) {
+          console.log(this.versionInfo)
+          android.openURLinBrowser(this.versionInfo.androidApk)
+        }
+      }
     }
   }
 </script>
+
+<style lang="stylus">
+  .haveUpload
+    display flex
+    flex-direction row
+    align-items center
+    .red-dot
+      width 10px
+      height 10px
+      border-radius 10px
+      background-color #ff6666
+      margin-right 5px
+    .text
+      flex-grow 1
+    .go-icon
+      width 15px
+      height 15px
+    
+</style>

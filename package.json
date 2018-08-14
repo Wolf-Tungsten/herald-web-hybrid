@@ -7,7 +7,8 @@
   "private": true,
   "scripts": {
     "dev": "parcel index.html --port 8080",
-    "build": "parcel build index.html"
+    "build": "rm -rf ./dist && parcel build index.html",
+    "deploy": "npm run build && node ./deploy.js"
   },
   "dependencies": {
     "axios": "^0.16.2",
@@ -16,6 +17,7 @@
     "js-cookie": "^2.2.0",
     "luxon": "^1.3.2",
     "marked": "^0.3.17",
+    "qiniu": "^7.2.1",
     "qiniu-js": "^2.1.0",
     "querystring": "^0.2.0",
     "vue": "^2.4.4",
@@ -50,14 +52,17 @@
     "plugins": [
       "transform-runtime",
       "transform-vue-jsx",
-      ["module-resolver",{
-        "root": "./",
-        "alias": {
-          "@": "./src",
-          "static": "./static",
-          "vue": "vue/dist/vue"
+      [
+        "module-resolver",
+        {
+          "root": "./",
+          "alias": {
+            "@": "./src",
+            "static": "./static",
+            "vue": "vue/dist/vue"
+          }
         }
-      }]
+      ]
     ]
   },
   "browserslist": [
