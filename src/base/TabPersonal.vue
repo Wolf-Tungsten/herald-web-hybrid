@@ -6,8 +6,9 @@
         //.identity {{ user ? user.identity : '…' }}
         .identity 东南大学{{ user ? user.identity: '...'}}
       .operator-container
-        .operator(@click='updateKernel()')
-          .text 更新内核
+        .operator(@click='update()')
+          .red-dot(v-if='needUpdate')
+          .text 检查更新
           img.icon(:src='downloadImg')
         .divider
         .operator(@click='logout()' )
@@ -58,7 +59,9 @@ import { anyTypeAnnotation } from 'babel-types';
         logoutImg,
         appletIntroImg,
         appletLaundryImg,
-        appletCourseStatImg 
+        appletCourseStatImg,
+        versionInfo:{},
+        needUpdate:false
       }
     },
     methods: {
@@ -72,11 +75,33 @@ import { anyTypeAnnotation } from 'babel-types';
           android.authFail()
         }
       },
-      updateKernel() {
-        if (android) {       
-          console.log('清除内核')
-          android.clearCache()
+      async update() {
+        console.log(this.versionInfo)
+        if(!android.getVersionCode()) {
+          // Alpha版本
+          android.toast('发现App新版本')
+          android.openURLinBrowser(this.versionInfo.androidApk)
         }
+        this.versionInfo = await api.get('/api/version')
+        if (android.getVersionCode() < parseInt(this.versionInfo['android'])) {
+          android.toast('发现App新版本')
+          android.openURLinBrowser(this.versionInfo.androidApk)
+        } else if (window.versionCode < parseInt(this.versionInfo['hybrid-kernel'])) {
+          android.toast('稍等一下，小猴马上回来！')
+          android.clearCache()
+        } else {
+          android.toast('已经是最新版本了～')
+        }
+        
+      }
+    },
+    async created() {
+      this.versionInfo = await api.get('/api/version')
+      if (window.versionCode < parseInt(this.versionInfo['hybrid-kernel'])) {
+        this.needUpdate = true
+      }
+      if (android.getVersionCode() < parseInt(this.versionInfo['android'])) {
+        this.needUpdate = true
       }
     }
   }
@@ -134,6 +159,12 @@ import { anyTypeAnnotation } from 'babel-types';
       align-items center
       justify-content center
       
+      .red-dot
+        width 10px
+        height 10px
+        border-radius 10px
+        background-color #ff6666
+        margin-right 5px
       .text
         color var(--color-text-bold)
       .icon

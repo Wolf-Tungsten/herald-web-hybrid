@@ -1,8 +1,9 @@
 {
-  "name": "herald-web",
+  "name": "herald-web-hybrid",
   "version": "1.0.0",
-  "description": "herald-web",
-  "author": "Rikumi <riku.mi@outlook.com>",
+  "version-code": 1,
+  "description": "herald-web-hybrid",
+  "author": "Rikumi <riku.mi@outlook.com> Wolf-Tungsten <gaoruihao@wolf-tungsten.com>",
   "private": true,
   "scripts": {
     "dev": "parcel index.html --port 8080",

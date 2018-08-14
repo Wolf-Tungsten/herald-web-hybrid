@@ -8,6 +8,9 @@ import Toasted from 'vue-toasted'
 import Persist from 'vue-component-persist'
 import { Main } from '../node_modules/element-ui';
 
+// 版本信息
+window.versionCode = 1
+
 // 定时检查token情况
 setInterval (()=>{
   if(!window.heraldToken){
