@@ -72,8 +72,9 @@ import { anyTypeAnnotation } from 'babel-types';
           android.authFail()
         }
       },
-      updateKernal() {
+      updateKernel() {
         if (android) {
+          console.log('清除内核')
           android.clearCache()
         }
       }

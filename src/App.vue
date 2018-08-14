@@ -13,15 +13,6 @@
   import router from './router'
   import tabs from './base/Tabs.vue'
 
-  // 注册 Service Worker
-  // Service Worker 由 parcel-plugin-sw-cache 包自动生成
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      // 隔开字符串防止被 parcel 探测
-      navigator.serviceWorker.register('/' + 'sw.js');
-    });
-  }
-
   export default {
     name: 'app',
     components: { 
@@ -48,9 +39,6 @@
   @import 'element-ui/lib/theme-chalk/index.css'
 </style>
 <style lang='stylus'>
-
-  ::-webkit-scrollbar
-    width:0
 
   :root
     --color-text-regular   #333333
