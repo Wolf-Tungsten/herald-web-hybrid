@@ -29,18 +29,24 @@
     },
     data () {
       return {
-        user:null,
-        needUpdate: false
+        user:null
       }
-    },
-    presist:{
     },
     created () {
-      if (android.getVersionCode() < parseInt(this.versionInfo['android'])) {
-        this.needUpdate = true
-      }
-      if (!android.getVersionCode){
-        this.needUpdate = true
+      
+    },
+    computed: {
+      needUpdate(){
+          try {
+            if (android.getVersionCode() < parseInt(this.versionInfo['android'])) {
+              return true
+            }
+            if (!android.getVersionCode){
+              return true
+            }
+          } catch(e) {
+            return false
+          }
       }
     },
     methods: {

@@ -1,6 +1,6 @@
 <template lang='pug'>
   #app(:class='env' v-loading='isLoading')
-    router-view(:user='user' :versionInfo='versionInfo')
+    router-view(:user='user' :version-info='versionInfo')
 </template>
 
 <script>

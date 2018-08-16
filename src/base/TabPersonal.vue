@@ -67,8 +67,7 @@
         appletIntroImg,
         appletLaundryImg,
         appletCourseStatImg,
-        appletSchoolCalenderImg,
-        needUpdate:false
+        appletSchoolCalenderImg
       }
     },
     methods: {
@@ -89,30 +88,40 @@
       },
       async update() {
         console.log(this.versionInfo)
-        if(!android.getVersionCode()) {
-          // Alpha版本
-          android.toast('发现App新版本')
-          android.openURLinBrowser(this.versionInfo.androidApk)
-        }
-        this.versionInfo = await api.get('/api/version')
-        if (android.getVersionCode() < parseInt(this.versionInfo['android'])) {
-          android.toast('发现App新版本')
-          android.openURLinBrowser(this.versionInfo.androidApk)
-        } else if (window.versionCode < parseInt(this.versionInfo['hybrid-kernel'])) {
-          android.toast('稍等一下，小猴马上回来！')
-          android.clearCache()
-        } else {
-          android.toast('已经是最新版本了～')
+        if(android) {
+          if(!android.getVersionCode()) {
+            // Alpha版本
+            android.toast('发现App新版本')
+            android.openURLinBrowser(this.versionInfo.androidApk)
+          }
+          this.versionInfo = await api.get('/api/version')
+          if (android.getVersionCode() < parseInt(this.versionInfo['android'])) {
+            android.toast('发现App新版本')
+            android.openURLinBrowser(this.versionInfo.androidApk)
+          } else if (window.versionCode < parseInt(this.versionInfo['hybrid-kernel'])) {
+            android.toast('稍等一下，小猴马上回来！')
+            android.clearCache()
+          } else {
+            android.toast('已经是最新版本了～')
+          }
         }
         
       }
     },
-    async created() {
-      if (window.versionCode < parseInt(this.versionInfo['hybrid-kernel'])) {
-        this.needUpdate = true
-      }
-      if (android.getVersionCode() < parseInt(this.versionInfo['android'])) {
-        this.needUpdate = true
+    created() {
+    },
+    computed:{
+      needUpdate(){
+        try {
+            if (android.getVersionCode() < parseInt(this.versionInfo['android'])) {
+              return true
+            }
+            if (!android.getVersionCode){
+              return true
+            }
+          } catch(e) {
+            return false
+          }
       }
     }
   }
