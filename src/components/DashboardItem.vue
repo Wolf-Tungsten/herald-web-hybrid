@@ -15,7 +15,13 @@
 
     methods:{
       pushRoute() {
-        android.pushRoute(this.route, this.title)
+
+        if(window.webkit){
+          window.webkit.messageHandlers.pushRoute.postMessage({"route": this.route, "title": this.title})
+        }
+        else if (android) {
+          android.pushRoute(this.route, this.title)
+        }
       }
     }
   }

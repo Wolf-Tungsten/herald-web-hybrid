@@ -73,22 +73,42 @@
     },
     methods: {
       pushRoute(route, title) {
-        if (android) {
+        if(window.webkit){
+          window.webkit.messageHandlers.pushRoute.postMessage({"route": route, "title": title})
+        }
+        else if (android) {
           android.pushRoute(route, title)
         }
       },
       schoolCalendar(){
-        if(android) {
+        if(window.webkit){
+          window.webkit.messageHandlers.openURL.postMessage({"url": 'http://jwc.seu.edu.cn/_upload/article/images/97/ba/7bae1a694170b4ecb46a409d7eba/7934c5dc-81cf-4576-ba93-7ecb415b3b8e.jpg'})
+        }
+        else if(android) {
           android.openURLinBrowser('http://jwc.seu.edu.cn/_upload/article/images/97/ba/7bae1a694170b4ecb46a409d7eba/7934c5dc-81cf-4576-ba93-7ecb415b3b8e.jpg')
         }
       },
       logout() {
-        if (android) {
+        if(window.webkit){
+          window.webkit.messageHandlers.logout.postMessage({"log": "logout"})
+        }
+        else if (android) {
           android.authFail()
         }
       },
       async update() {
         console.log(this.versionInfo)
+        if(window.webkit){
+          if (window.versionCode < parseInt(this.versionInfo['hybrid-kernel'])) {
+            window.webkit.messageHandlers.toast.postMessage({"text": '稍等一下，小猴马上回来！'})
+            window.webkit.messageHandlers.clearCache.postMessage(nil)
+          } 
+          else {
+            window.webkit.messageHandlers.toast.postMessage({"text": '已经是最新版本～'})
+          }
+          //window.webkit.messageHandlers.toast.postMessage({"text": '已经是最新版本～'})
+          return
+        }
         if(!android.getVersionCode()) {
           // Alpha版本
           android.toast('发现App新版本')

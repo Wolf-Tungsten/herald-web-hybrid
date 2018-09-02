@@ -105,7 +105,10 @@
       viewLink(notice) {
         let route
         if (notice.isAttachment) {
-          if (android) {
+          if(window.webkit){
+            window.webkit.messageHandlers.openURL.postMessage({"url": notice.url})
+          }
+          else if (android) {
             android.openURLinBrowser(notice.url)
           }
         } else {
@@ -116,9 +119,13 @@
           } else {
             route = '/notice/url/' + encodeURIComponent(notice.url)
           }
-          if (android) {
-            android.pushRoute(route, '通知公告')
+          if(window.webkit){
+            window.webkit.messageHandlers.pushRoute.postMessage({"route": route, "title": "通知公告"})
           }
+          else if (android) {
+            android.pushRoute(route, "通知公告")
+          }
+
         }
       }
     }

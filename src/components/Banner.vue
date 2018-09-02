@@ -41,7 +41,10 @@
         if (hasUrl) {
 
             let url = await api.put('/api/banner', { bid })
-            if (android) {
+            if(window.webkit){
+              window.webkit.messageHandlers.openURL.postMessage({"url": url})
+            }
+            else if (android) {
               android.openURLinBrowser(url)
             }
           
