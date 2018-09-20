@@ -50,7 +50,10 @@
         this.markdown = marked(res)
       },
       open() {
-        if(android){
+        if(window.webkit){
+          window.webkit.messageHandlers.openURL.postMessage({"url": this.url})
+        }
+        else if(android){
           android.openURLinBrowser(this.url)
         }
       }
