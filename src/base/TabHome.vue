@@ -1,7 +1,7 @@
 <template lang='pug'>
   .tab
     banner
-    dashboard(:user='user')
+    dashboard(v-if='user' :user='user')
     .widget(v-if="needUpdate")
       .haveUpload(@click="downloadApk")
         .red-dot
@@ -29,7 +29,7 @@
     },
     data () {
       return {
-        user:null
+        user:this.user
       }
     },
     created () {

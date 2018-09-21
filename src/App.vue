@@ -31,9 +31,9 @@
       user: 'herald-default-user'
     },
     async created() {
-        this.user = await api.get('/api/user')
-        this.user.admin = await api.get('/api/admin/admin')
-        this.versionInfo = await api.get('/api/version')
+        api.get('/api/user').then(res => this.user = res)
+        api.get('/api/admin/admin').then(res => this.user.admin = res)
+        api.get('/api/version').then(res => this.versionInfo = res)
     }
   }
 </script>

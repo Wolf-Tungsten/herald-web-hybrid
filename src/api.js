@@ -86,9 +86,15 @@ export default new Vue({
         if (this.isLogin) {
           this.token = ''
           Vue.toasted.show('登录已失效，请重新登录')
+          if(window.webkit){
+            window.webkit.messageHandlers.logout.postMessage({"log": "logout"})
+          }
+          else if (android) {
+            android.authFail()
+          }
         }
       } else {
-        Vue.toasted.show('部分接口请求失败')
+        //Vue.toasted.show('部分接口请求失败')
       }
 
       throw new Error(data)

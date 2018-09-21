@@ -1,7 +1,6 @@
 <template lang='pug'>
 
   .widget.dashboard
-
     .dashboard-container(v-if='user')
       item(name='余额' 
         :value='card && card.info && card.info.balance' 
@@ -15,27 +14,27 @@
         :is-stale='pe && pe.isStale' 
         route='/pe' 
         title='跑操查询'
-        v-if='!isUndergraduate')
+        v-if='isUndergraduate')
 
       item(name='讲座' 
         :value='lecture && lecture.length' 
         :is-stale='lecture && lecture.isStale' 
         route='/lecture' 
         title='人文讲座'
-        v-if='!isUndergraduate')
+        v-if='isUndergraduate')
 
       item(name='SRTP' 
         :value='srtp && srtp.info.points' 
         :is-stale='srtp && srtp.isStale' 
         route='/srtp' 
         title='SRTP查询'
-        v-if='!isUndergraduate')
+        v-if='isUndergraduate')
 
       item(:name='isGraduate ? "成绩" : "绩点"' 
         :value='gpa && (gpa.gpa || gpa.score || "暂无")' 
         :is-stale='gpa && gpa.isStale'
         route='/grade' 
-        v-if='!isStudent' 
+        v-if='isStudent' 
         title='绩点查询与估算'
         :is-graduate='isGraduate')
 
@@ -93,13 +92,16 @@
     },
     computed: {
       isStudent() {
-        return !(this.user && /生/.test(this.user.identity))
+        return this.user && /生/.test(this.user.identity)
       },
       isUndergraduate() {
-        return !(this.user && /本科/.test(this.user.identity))
+        return this.user && /本科/.test(this.user.identity)
       },
       isGraduate() {
-        return !(this.isStudent && !this.isUndergraduate)
+        return this.isStudent && !this.isUndergraduate
+      },
+      identity() {
+        return this.user
       }
     }
   }
