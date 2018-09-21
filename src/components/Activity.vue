@@ -38,6 +38,9 @@
       },
       async click({ hasUrl, aid }) {
         if (hasUrl) {
+          if(window.webkit){
+            window.webkit.messageHandlers.openURL.postMessage({"url": await api.put('/api/activity', { aid })})
+          }
 
           // iOS WebApp 端，需要用 location.href 赋值才能在 Safari 中打开，否则将会在 WebApp 中打开，导致无法返回
           if (window.__herald_env === 'webapp' || window.__herald_env === 'wx') {
