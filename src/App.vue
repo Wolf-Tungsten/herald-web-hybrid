@@ -445,8 +445,10 @@
     // 强制加固定灰底，尤其在微信和小程序中用于屏蔽黑底和微信的提示文字
     @media screen and (max-width: 600px)
       &::before
-        content '专注公益更懂你'
-        padding 80px 0
+
+        content ''
+        background-size 100px 100px
+        padding 150px 0
         text-align center
         position fixed
         font-size 13px
