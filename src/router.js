@@ -9,6 +9,7 @@ import Srtp from '@/pages/Srtp'
 import Library from '@/pages/Library'
 import Pe from '@/pages/Pe'
 import Intro from '@/pages/Intro'
+import Bus from '@/pages/Bus'
 import NoticeView from '@/pages/NoticeView'
 import ScreenSaver from '@/pages/ScreenSaver'
 import CourseStat from '@/pages/CourseStat'
@@ -86,6 +87,11 @@ export default new Router({
       path: '/library',
       name: '图书馆',
       component: Library
+    },
+    {
+      path: '/bus',
+      name: '校车',
+      component: Bus
     },
     {
       path: '/pe',

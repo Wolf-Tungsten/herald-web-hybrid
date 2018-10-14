@@ -36,6 +36,11 @@
         .text 洗衣房查询
         img.go-icon(:src='goImg')
 
+      .applet.end(@click='pushRoute("/bus", "校车助手")')
+        img.icon(:src='appletBusImg')
+        .text 校车助手
+        img.go-icon(:src='goImg')
+
         
 
   
@@ -53,7 +58,7 @@
   import appletLaundryImg from 'static/images/applet-laundry.png'
   import appletCourseStatImg from 'static/images/applet-course-stat.png'
   import appletSchoolCalenderImg from 'static/images/applet-school-calendar.png'
-
+  import appletBusImg from 'static/images/applet-bus.png'
   export default {
     props:['user','versionInfo'],
     components: {
@@ -67,7 +72,8 @@
         appletIntroImg,
         appletLaundryImg,
         appletCourseStatImg,
-        appletSchoolCalenderImg
+        appletSchoolCalenderImg,
+        appletBusImg
       }
     },
     methods: {

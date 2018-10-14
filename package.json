@@ -7,7 +7,7 @@
   "private": true,
   "scripts": {
     "dev": "parcel index.html --port 8080",
-    "build": "rm -rf ./dist && parcel build index.html",
+    "build": "parcel build index.html",
     "deploy": "node ./deploy.js"
   },
   "dependencies": {
@@ -41,6 +41,7 @@
     "babel-preset-stage-0": "^6.24.1",
     "normalize.css": "^7.0.0",
     "parcel": "^1.9.7",
+    "parcel-plugin-sw-cache": "^0.2.6",
     "pug": "^2.0.0-rc.4",
     "stylus": "^0.54.5",
     "vue-hot-reload-api": "^2.3.0",
@@ -66,6 +67,10 @@
         }
       ]
     ]
+  },
+  "cache": {
+    "importWorkboxFrom":"local",  
+    "clientsClaim": true
   },
   "browserslist": [
     "ios >= 8",

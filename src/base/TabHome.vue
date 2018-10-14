@@ -29,7 +29,7 @@
     },
     data () {
       return {
-        user:this.user
+        
       }
     },
     created () {

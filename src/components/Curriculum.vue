@@ -71,9 +71,13 @@
       // term 有缓存，先为缓存数据计算一遍 displayTerm
       // 不要根据返回的 current 来判断显示哪个学期，而是找结束时间大于当前时间的最早学期来显示，这样对于假期期间的情况也适合
       let now = Date.now()
+      try {
       this.term.list.sort((a, b) => a.endDate - b.endDate)
       this.currentTerm = this.term.list.find(k => k.endDate > now).name
       this.displayTerm = this.currentTerm
+      } catch(e) {
+        console.log('没有学期缓存')
+      }
       try {
         let checkTerm = await api.get('/api/term')
         this.term = checkTerm

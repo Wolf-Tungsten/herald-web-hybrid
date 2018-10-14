@@ -6,10 +6,10 @@ import router from './router'
 import interceptor from './util/interceptor'
 import Toasted from 'vue-toasted'
 import Persist from 'vue-component-persist'
-import { Main } from '../node_modules/element-ui';
+//import { Main } from '../node_modules/element-ui';
 
 // 版本信息
-window.versionCode = 8
+window.versionCode = 11
 
 // 定时检查token情况
 setInterval (()=>{

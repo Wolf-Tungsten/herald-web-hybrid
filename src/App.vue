@@ -1,13 +1,22 @@
 <template lang='pug'>
-  #app(:class='env' v-loading='isLoading')
+  #app(:class='env')
     router-view(:user='user' :version-info='versionInfo')
 </template>
 
 <script>
   import Vue from 'vue'
   import { xhook } from 'xhook'
-  import { Loading } from 'element-ui'
-  Vue.use(Loading)
+  //import { Loading } from 'element-ui'
+  //Vue.use(Loading)
+
+    // 注册 Service Worker
+  // Service Worker 由 parcel-plugin-sw-cache 包自动生成
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      // 隔开字符串防止被 parcel 探测
+      navigator.serviceWorker.register('/' + 'sw.js');
+    });
+  }
 
   import api from './api'
   import router from './router'
@@ -37,9 +46,7 @@
     }
   }
 </script>
-<style>
-  @import 'element-ui/lib/theme-chalk/index.css'
-</style>
+
 <style lang='stylus'>
 
   :root
