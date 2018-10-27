@@ -7,7 +7,7 @@
           .left {{ k.labName }}
           .right {{ k.score ? '成绩：' + k.score : k.teacherName }}
         .bottom(v-if='!k.score')
-          .left {{ formatPeriodNatural(k.startDate, k.endDate) }}
+          .left {{ formatPeriodNatural(k.startTime, k.endTime) }}
           .right {{ k.location + '室' }}
 
 </template>
@@ -33,7 +33,7 @@
       async reload() {
         let now = new Date()
         let experiment = await api.get('/api/phylab')
-        this.experiment = experiment.filter(k => k.endDate > now || k.score.length)
+        this.experiment = experiment.filter(k => k.endTime > now.getTime() || k.score.length)
       }
     }
   }

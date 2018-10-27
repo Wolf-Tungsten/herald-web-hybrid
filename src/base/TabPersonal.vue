@@ -31,7 +31,7 @@
         .text 2018-2019 校历
         img.go-icon(:src='goImg')
       
-      .applet.end(@click='pushRoute("/laundry", "洗衣房")')
+      .applet(@click='pushRoute("/laundry", "洗衣房")')
         img.icon(:src='appletLaundryImg')
         .text 洗衣房查询
         img.go-icon(:src='goImg')
