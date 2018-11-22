@@ -24,6 +24,7 @@ import TabHome from '@/base/TabHome'
 import TabDiscover from '@/base/TabDiscover'
 import TabNotice from '@/base/TabNotice'
 import TabPersonal from '@/base/TabPersonal'
+import Curriculum from '@/pages/Curriculum'
 
 Vue.use(Router)
 
@@ -157,6 +158,11 @@ export default new Router({
       path: '/download',
       name: '小猴偷米微信 / App',
       component: Download
+    },
+    {
+      path: '/curriculum',
+      name: '课表概览',
+      component: Curriculum
     },
     {
       path: '*',

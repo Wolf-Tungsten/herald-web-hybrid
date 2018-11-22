@@ -7,6 +7,7 @@
         .red-dot
         span.text 发现新版本，点击下载安装
     .todo
+      toutiao
       exam(v-if='user && /^21/.test(user.cardnum)')
       curriculum
       experiment(v-if='user && /^21/.test(user.cardnum)')
@@ -19,13 +20,14 @@
   import curriculum from '@/components/Curriculum.vue'
   import experiment from '@/components/Experiment.vue'
   import banner from '@/components/Banner.vue'
+  import toutiao from '@/components/TouTiao.vue'
   import api from '@/api'
   import goImg from 'static/images/go.png'
 
   export default {
     props:['user', 'versionInfo'],
     components: {
-      login, dashboard, curriculum, experiment, exam, banner, goImg
+      login, dashboard, curriculum, experiment, exam, banner, goImg, toutiao
     },
     data () {
       return {
