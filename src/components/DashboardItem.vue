@@ -1,6 +1,6 @@
 <template lang="pug">
 
-  .dashboard-item(:class='{ stale: isStale }' :to='route' ondragstart='return false')
+  .dashboard-item(:class='{ stale: isStale }' @click="pushRoute")
     img.icon(v-if='icon' :src='icon')
     .name {{ name }}
     .value {{ value != null ? value : '···' }}
@@ -9,9 +9,20 @@
 <script>
 
   export default {
-    props: ['name', 'value', 'isStale', 'route', 'icon'],
+    props: ['name', 'value', 'isStale', 'route', 'icon', 'title'],
     data() {
       return {}
+    },
+    methods:{
+      pushRoute() {
+        console.log(this.route, this.title)
+        if(window.webkit){
+          window.webkit.messageHandlers.pushRoute.postMessage({"route": route, "title": title})
+        }
+        else if (android) {
+          android.pushRoute(this.route, this.title)
+        }
+      },
     }
   }
 

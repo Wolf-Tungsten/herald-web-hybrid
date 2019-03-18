@@ -25,6 +25,8 @@ import TabDiscover from '@/base/TabDiscover'
 import TabNotice from '@/base/TabNotice'
 import TabPersonal from '@/base/TabPersonal'
 import Curriculum from '@/pages/Curriculum'
+import CET from '@/pages/CET'
+import Classroom from '@/pages/Classroom'
 
 Vue.use(Router)
 
@@ -163,6 +165,16 @@ export default new Router({
       path: '/curriculum',
       name: '课表概览',
       component: Curriculum
+    },
+    {
+      path: '/cet',
+      name: 'CET 查询',
+      component: CET
+    },
+    {
+      path: '/classroom',
+      name: '空教室',
+      component: Classroom
     },
     {
       path: '*',

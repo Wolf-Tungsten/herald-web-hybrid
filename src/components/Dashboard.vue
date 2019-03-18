@@ -6,21 +6,21 @@
     .dashboard-container.border-top(key='dashboard' v-if='user')
 
       .row
-        item(:icon='iconCard' name='余额' :value='card && card.info && card.info.balance' :is-stale='card && card.isStale' @click='pushRoute("/card", "一卡通查询")')
-        item(v-if='isUndergraduate' :icon='iconLecture' name='人文讲座' :value='lecture && lecture.length' :is-stale='lecture && lecture.isStale' @click='pushRoute("/lecture", "讲座")')
+        item(:icon='iconCard' name='余额' :value='card && card.info && card.info.balance' :is-stale='card && card.isStale' route="/card" title="一卡通查询")
+        item(v-if='isUndergraduate' :icon='iconLecture' name='人文讲座' :value='lecture && lecture.length' :is-stale='lecture && lecture.isStale' route="/lecture" title="讲座")
 
       .row
-        item(v-if='isUndergraduate' :icon='iconSrtp' name='SRTP' :value='srtp && srtp.info.points' :is-stale='srtp && srtp.isStale' @click='pushRoute("/srtp", "SRTP")')
-        item(v-if='isStudent' :icon='iconGrade' :name='(isGraduate ? "成绩" : "总绩点")' :value='gpa && (gpa.gpa || gpa.score || "暂无")' :is-stale='gpa && gpa.isStale' @click='pushRoute("/grade", "成绩查询")' :is-graduate='isGraduate')
+        item(v-if='isUndergraduate' :icon='iconSrtp' name='SRTP' :value='srtp && srtp.info.points' :is-stale='srtp && srtp.isStale' route="/srtp" title="SRTP")
+        item(v-if='isStudent' :icon='iconGrade' :name='(isGraduate ? "成绩" : "总绩点")' :value='gpa && (gpa.gpa || gpa.score || "暂无")' :is-stale='gpa && gpa.isStale' route="/grade" title="成绩查询" :is-graduate='isGraduate')
 
       .row(v-if='!tidyMode')
-        item(v-if='isUndergraduate' name='跑操' :value='pe && pe.count' :is-stale='pe && pe.isStale'  @click='pushRoute("/pe", "跑操查询")')
-        item(name='借书' :value='library && library.length' :is-stale='library && library.isStale' @click='pushRoute("/library", "图书馆")')
+        item(v-if='isUndergraduate' name='跑操' :value='pe && pe.count' :is-stale='pe && pe.isStale'  route="/pe" title="跑操查询")
+        item(name='借书' :value='library && library.length' :is-stale='library && library.isStale' route="/library"  title="图书馆")
         
 
       .row(v-if='!tidyMode')
-        item(name='空教室' route='/classroom' value='›')
-        item(v-if='isUndergraduate' name='CET' @click='pushRoute("/cet", "四六级报名信息")' value='›')
+        item(name='空教室' route='/classroom' title="空教室" value='›')
+        item(v-if='isUndergraduate' name='CET' route="/cet" title="四六级报名信息" value='›')
 
 </template>
 
@@ -94,6 +94,7 @@
     },
     methods: {
       pushRoute(route, title) {
+        console.log(route, title)
         if(window.webkit){
           window.webkit.messageHandlers.pushRoute.postMessage({"route": route, "title": title})
         }
