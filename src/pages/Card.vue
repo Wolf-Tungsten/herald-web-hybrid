@@ -2,15 +2,12 @@
 
   .page(v-if='card')
     ul.info-bar
-      li.info
+      button.info
         .title 卡余额
         .content {{ card.info.balance }}
-      li.info
+      button.info
         .title 电子钱包余额
         .content {{ card.info.eacc }}
-      li.info.charge
-        router-link(to='/card/charge')
-          .title 充值
     ul.detail-list
       li(v-for='item in card.detail')
         .top
@@ -18,6 +15,7 @@
         .bottom
           .left {{ item.amount.toFixed(2) }}
           .right {{ formatTimeNatural(item.time) }}
+      li.empty(v-if='!card.detail.length') 暂无消费数据
       li.prev-day
         .hint {{ formatDateNatural(oldestDate) }}至今 总支出 {{ totalPayments.toFixed(2) }}
         button(@click='loadPrevDay()' :class='{ loading: loading }') {{ loading ? '...' : '加载前一天' }}

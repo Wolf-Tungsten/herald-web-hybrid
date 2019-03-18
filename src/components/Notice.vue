@@ -1,8 +1,8 @@
 <template lang="pug">
 
-  .widget.notice
-    ul.info-bar
-      li.info(v-for='site in sites' @click='currentSite = site' :class='{ selected: currentSite == site }')
+  .page.notice
+    .info-bar
+      button.info(v-for='site in sites' @click='currentSite = site' :class='{ selected: currentSite == site }')
         .title {{ site }}
     ul.detail-list
       li(v-for='item in filteredNotice' :key='item.title' :class='{ important: item.isImportant }')
@@ -132,33 +132,3 @@
   }
 
 </script>
-<style lang="stylus">
-  .widget.notice
-    li.info
-      cursor pointer
-      transition .3s
-
-      &:not(.selected)
-        background none
-        color var(--color-text-bold)
-
-        .title
-          font-weight normal
-
-    .important .top .left
-      font-weight bold
-
-    .tag
-      display inline-block
-      border-radius 3px
-      margin-right 5px
-      color #ffffff
-      font-size 12px
-      padding 1px 5px
-      vertical-align baseline
-      background var(--color-primary)
-
-      &.important
-        font-weight bold
-
-</style>

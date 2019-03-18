@@ -1,6 +1,6 @@
 <template lang='pug'>
-  #personal
-    .personal-info
+   #personal
+    .widget.personal-info
       .info-container
         .name {{ user ? user.name : '加载中' }}
         //.identity {{ user ? user.identity : '…' }}
@@ -15,7 +15,7 @@
           .text 退出登录
           img.icon(:src='logoutImg')
     
-    .applet-container
+    .widget.applet-container
       .applet(@click='pushRoute("/intro", "新生指引")')
         img.icon(:src='appletIntroImg')
         .text 新生指引
@@ -54,11 +54,11 @@
   import downloadImg from 'static/images/download.png'
   import goImg from 'static/images/go.png'
 
-  import appletIntroImg from 'static/images/applet-intro.png'
-  import appletLaundryImg from 'static/images/applet-laundry.png'
-  import appletCourseStatImg from 'static/images/applet-course-stat.png'
-  import appletSchoolCalenderImg from 'static/images/applet-school-calendar.png'
-  import appletBusImg from 'static/images/applet-bus.png'
+  import appletIntroImg from 'static/images/applet-intro.svg'
+  import appletLaundryImg from 'static/images/applet-laundry.svg'
+  import appletCourseStatImg from 'static/images/applet-course-stat.svg'
+  import appletSchoolCalenderImg from 'static/images/applet-school-calendar.svg'
+  import appletBusImg from 'static/images/applet-bus.svg'
   export default {
     props:['user','versionInfo'],
     components: {
@@ -222,13 +222,13 @@
       background-color var(--color-divider)
 
     .applet-container
-      border-top solid 10px #f0f0f0
       display flex
       flex-direction column
       align-items stretch
+      padding 10px 20px
 
       .applet
-        padding 10px 15px
+        padding 10px 0
         border-bottom solid 1px var(--color-divider)
         display flex
         align-items center

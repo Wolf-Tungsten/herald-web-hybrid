@@ -1,60 +1,48 @@
 <template lang='pug'>
 
-  .widget.dashboard
-    .dashboard-container(v-if='user')
-      item(name='余额' 
-        :value='card && card.info && card.info.balance' 
-        :is-stale='card && card.isStale' 
-        route='/card'
-        title='一卡通'
-        )
+  transition-group(name='fade').widget.dashboard
+    banner(key='banner' v-show='!tidyMode')
 
-      item(name='跑操' 
-        :value='pe && pe.count' 
-        :is-stale='pe && pe.isStale' 
-        route='/pe' 
-        title='跑操查询'
-        v-if='isUndergraduate')
+    .dashboard-container.border-top(key='dashboard' v-if='user')
 
-      item(name='讲座' 
-        :value='lecture && lecture.length' 
-        :is-stale='lecture && lecture.isStale' 
-        route='/lecture' 
-        title='人文讲座'
-        v-if='isUndergraduate')
+      .row
+        item(:icon='iconCard' name='余额' :value='card && card.info && card.info.balance' :is-stale='card && card.isStale' @click='pushRoute("/card", "一卡通查询")')
+        item(v-if='isUndergraduate' :icon='iconLecture' name='人文讲座' :value='lecture && lecture.length' :is-stale='lecture && lecture.isStale' @click='pushRoute("/lecture", "讲座")')
 
-      item(name='SRTP' 
-        :value='srtp && srtp.info.points' 
-        :is-stale='srtp && srtp.isStale' 
-        route='/srtp' 
-        title='SRTP查询'
-        v-if='isUndergraduate')
+      .row
+        item(v-if='isUndergraduate' :icon='iconSrtp' name='SRTP' :value='srtp && srtp.info.points' :is-stale='srtp && srtp.isStale' @click='pushRoute("/srtp", "SRTP")')
+        item(v-if='isStudent' :icon='iconGrade' :name='(isGraduate ? "成绩" : "总绩点")' :value='gpa && (gpa.gpa || gpa.score || "暂无")' :is-stale='gpa && gpa.isStale' @click='pushRoute("/grade", "成绩查询")' :is-graduate='isGraduate')
 
-      item(:name='isGraduate ? "成绩" : "绩点"' 
-        :value='gpa && (gpa.gpa || gpa.score || "暂无")' 
-        :is-stale='gpa && gpa.isStale'
-        route='/grade' 
-        v-if='isStudent' 
-        title='绩点查询与估算'
-        :is-graduate='isGraduate')
+      .row(v-if='!tidyMode')
+        item(v-if='isUndergraduate' name='跑操' :value='pe && pe.count' :is-stale='pe && pe.isStale'  @click='pushRoute("/pe", "跑操查询")')
+        item(name='借书' :value='library && library.length' :is-stale='library && library.isStale' @click='pushRoute("/library", "图书馆")')
+        
 
-      item(name='借书'
-        :value='library && library.length'
-        :is-stale='library && library.isStale'
-        title='图书馆'
-        route='/library') 
+      .row(v-if='!tidyMode')
+        item(name='空教室' route='/classroom' value='›')
+        item(v-if='isUndergraduate' name='CET' @click='pushRoute("/cet", "四六级报名信息")' value='›')
 
 </template>
 
 <script>
   import item from './DashboardItem.vue'
   import api from '@/api'
+  import downloadImg from 'static/images/download.png'
   import logoutImg from 'static/images/logout.png'
+  import collapseImg from 'static/images/collapse.png'
+  import expandImg from 'static/images/expand.png'
+  import iconCard from 'static/images/card.svg'
+  import iconLecture from 'static/images/lecture.svg'
+  import iconSrtp from 'static/images/srtp.svg'
+  import iconGrade from 'static/images/grade.svg'
+  import banner from './Banner.vue'
+  import moment from 'moment'
 
   export default {
     props: ['user'],
     components: {
       item, 
+      banner
     },
     data() {
       return {
@@ -64,7 +52,18 @@
         srtp: null,
         lecture: null,
         library: null,
-        logoutImg
+        notice: null,
+        activities: null,
+        curNoticeIndex: 0,
+        downloadImg,
+        logoutImg,
+        collapseImg,
+        expandImg,
+        iconCard,
+        iconLecture,
+        iconSrtp,
+        iconGrade,
+        tidyMode: false
       }
     },
     persist: {
@@ -73,9 +72,11 @@
       card: 'herald-default-card',
       srtp: 'herald-default-srtp',
       lecture: 'herald-default-lecture',
-      library: 'herald-default-library'
+      library: 'herald-default-library',
+      notice: 'herald-default-notice',
+      activities: 'herald-default-activities'
     },
-    created() {
+    async created() {
       // 下列不能用 await，否则前面的语句会阻塞后面的语句，前面的异常会阻止后面的语句
       api.get('/api/pe').then(res => this.pe = res)
       api.get('/api/gpa').then(res => this.gpa = res)
@@ -83,12 +84,26 @@
       api.get('/api/srtp').then(res => this.srtp = res)
       api.get('/api/lecture').then(res => this.lecture = res)
       api.get('/api/library').then(res => this.library = res)
+      api.get('/api/activity?pagesize=20').then(res => this.activities = res)
+      api.get('/api/notice').then(res => {
+        this.notice = res
+        setInterval(() => {
+          this.curNoticeIndex = this.filteredNotice.length ? (this.curNoticeIndex + 1) % this.filteredNotice.length : 0
+        }, 5000)
+      })
     },
     methods: {
-      logout() {
-        android.authFail()
+      pushRoute(route, title) {
+        if(window.webkit){
+          window.webkit.messageHandlers.pushRoute.postMessage({"route": route, "title": title})
+        }
+        else if (android) {
+          android.pushRoute(route, title)
+        }
       },
-
+      logout() {
+        this.$store.commit('logout')
+      }
     },
     computed: {
       isStudent() {
@@ -100,8 +115,14 @@
       isGraduate() {
         return this.isStudent && !this.isUndergraduate
       },
-      identity() {
-        return this.user
+      filteredNotice() {
+        // 这里过滤两天内的最近通知
+        return this.notice && this.notice.filter(k => {
+          return k.time >= +moment().startOf('day').subtract(1, 'day')
+        })
+      },
+      curNotice() {
+        return this.filteredNotice && this.filteredNotice[this.curNoticeIndex]
       }
     }
   }
@@ -110,11 +131,20 @@
 <style lang="stylus" scoped>
 
   .widget.dashboard
-    padding 20px 15px
+    overflow hidden
+
+    .fade-enter-active, .fade-leave-active, .fade-move
+      overflow hidden
+      max-height 100vh
+      transition max-height .3s, opacity .3s !important
+      position relative
+
+    .fade-enter, .fade-leave-to
+      opacity 0 !important
+      max-height 0 !important
 
     .info-container
       padding 0 0 15px
-      margin 0 10px
       display flex
       flex-direction row
       align-items: center
@@ -137,37 +167,42 @@
         a
           margin-left 5px
 
+      .text-icon
+        display flex
+        flex-direction row
+        align-items center
+
+        .text
+          margin-left 3px
+          color #777
+
       .icon
         width 20px
         height 20px
         cursor pointer
 
+        &.grayscale
+          filter grayscale()
+
     .dashboard-container
-      width 100%
-      display: block
-      white-space: nowrap
-      overflow-x: scroll
+      display flex
+      flex-direction column
       box-sizing: border-box
-      text-align: center
-      
-      ::-webkit-scrollbar
-        display none
+      margin 5px -20px -15px
 
-      > *
-        display: inline-block
-        box-sizing: border-box
-        width 19.6%
-        max-width 80px
+      .row
+        display flex
+        flex-direction row
 
-        + *
-          border-left 0.5px solid var(--color-divider)
-
+        > *
+          flex 1 1 0
 
     .admin-container
-      padding 0 10px 15px
+      padding 0 0 15px
       display flex
       flex-direction row
       align-items center
+      justify-content center
 
       .subtitle
         font-size 12px

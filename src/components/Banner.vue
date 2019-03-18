@@ -1,14 +1,14 @@
 <template lang="pug">
 
-  .widget.banner(v-if='banner && banner.length')
-    banner.banner(:auto="5000", :loop="true", :speed="500", :dots="true", :watch-items="banner")
-      banner-item.banner-item(v-for='page in banner' :key='page.bid')
-        .img-container(@click='click(page)')
-          img(:src='page.pic' ondragstart="return false")
-        .text-container
-          .banner-hint(v-if='page.schoolnumPrefix && page.schoolnumPrefix.indexOf("guest") === -1') 专属推荐
-          .banner-title {{ page.title }}
-          .banner-link(v-if='page.hasUrl' @click='click(page)') 详情 >
+  //- 这里要用 v-show 不能用 v-if，否则会连环出错+异步死递归
+  banner.banner(v-show='banner && banner.length' :auto="5000", :loop="true", :speed="500", :dots="false", :watch-items="banner")
+    banner-item.banner-item(v-for='page in banner' :key='page.bid')
+      .img-container(@click='click(page)')
+        img(:src='page.pic' ondragstart="return false")
+      .text-container
+        button.banner-hint(v-if='page.schoolnumPrefix && page.schoolnumPrefix.indexOf("guest") === -1') 专属推荐
+        .banner-title {{ page.title }}
+        button.banner-link(v-if='page.hasUrl' @click='click(page)') 详情
 
 </template>
 <script>
@@ -86,80 +86,88 @@
   }
 
 </style>
+<style>
+
+  @import 'vue-l-carousel/dist/main.css';
+
+  .v-carousel-dots {
+    bottom: 5px;
+  }
+
+  .v-carousel-dot {
+    width: 10px;
+    height: 3px;
+  }
+
+  .v-carousel-nav {
+    display: none;
+    padding: 0 12px;
+    font-size: 14px;
+    background: #fff;
+    color: var(--color-text-bold);
+  }
+
+  .v-carousel-items {
+    height: 100%
+  }
+
+</style>
 <style lang="stylus" scoped>
 
-  .widget.banner
-    position relative
-    padding 0
+  .banner
+    overflow hidden
+    margin 0 -15px
+    width auto
 
-    @media screen and (max-width: 600px)
-      margin-top 0
+    .banner-item
+      height 100%
 
-    .banner
-      overflow hidden
+      .img-container
+        position relative
+        margin 0 15px
+        // overflow hidden
 
-      .banner-item
-        width 100%
-        height 100%
+        &::after
+          display block
+          content ' '
+          width 100%
+          padding-top 40%
 
-        .img-container
-          position relative
-          margin 20px 20px 0
-          // overflow hidden
+        img
+          position absolute
+          left 0
+          right 0
+          top 0
+          bottom 0
+          width 100%
+          height 100%
+          object-fit cover
+          -webkit-user-select: none
+          -moz-user-select: none
+          -ms-user-select: none
+          user-select: none
+          cursor pointer
+          border-radius 3px
+          box-shadow 0 2px 10px 0 rgba(#000, .05)
 
-          &::after
-            display block
-            content ' '
-            width 100%
-            padding-top 40%
+      .text-container
+        display flex
+        flex-direction row
+        padding 15px 20px
+        justify-content center
+        align-items baseline
+        min-width 0
 
-          img
-            position absolute
-            left 0
-            right 0
-            top 0
-            bottom 0
-            width 100%
-            height 100%
-            object-fit cover
-            -webkit-user-select: none
-            -moz-user-select: none
-            -ms-user-select: none
-            user-select: none
-            cursor pointer
-            border-radius 3px
-            box-shadow 0 5px 15px rgba(#000, .1)
+        * + *
+          margin-left 10px
 
-        .text-container
-          display flex
-          flex-direction row
-          padding 15px 20px
-          justify-content center
-          align-items baseline
-          min-width 0
-
-          * + *
-            margin-left 10px
-
-          .banner-hint, .banner-link
-            padding 3px 7px
-            background var(--color-primary)
-            border-radius 3px
-            color #fff
-            font-weight bold
-            font-size 12px
-            white-space nowrap
-            overflow hidden
-            cursor pointer
-
-          .banner-title
-            color var(--color-text-regular)
-            font-size 15px
-            font-weight bold
-            // white-space nowrap
-            overflow hidden
-            text-overflow ellipsis
-            line-height 1.7em
-            height 1.7em
+        .banner-title
+          color var(--color-text-regular)
+          font-size 14px
+          // white-space nowrap
+          overflow hidden
+          text-overflow ellipsis
+          line-height 1.7em
+          height 1.7em
 
 </style>

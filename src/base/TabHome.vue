@@ -1,6 +1,5 @@
 <template lang='pug'>
   .tab
-    banner
     dashboard(v-if='user' :user='user')
     .widget(v-if="needUpdate")
       .haveUpload(@click="downloadApk")
