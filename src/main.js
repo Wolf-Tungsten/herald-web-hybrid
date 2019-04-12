@@ -9,7 +9,7 @@ import Persist from 'vue-component-persist'
 //import { Main } from '../node_modules/element-ui';
 
 // 版本信息
-window.versionCode = 19
+window.versionCode = 20
 
 // 定时检查token情况
 setInterval (()=>{
