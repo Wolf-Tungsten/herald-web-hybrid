@@ -11,7 +11,7 @@
           .content {{ Math.max(0, 8 - lecture.length) }}
       ul.detail-list
         li(v-for='item in lecture')
-          .top(:href='item.lectureUrl' @click='()=>{if(item.lectureUrl){android.openURLinBrowser(item.lectureUrl)}}' )
+          .top( @click='click(item.lectureUrl)')
             .sub-title {{item.lectureTitle ?  item.lectureTitle : formatTime(item.time, 'yyyy/MM/dd')+' 打卡' }}
             .des {{ item.lectureTitle ? '打卡时间: '+formatTime(item.time, 'yyyy/MM/dd') : '' }}
             .des {{ item.location }}
@@ -39,7 +39,13 @@
       this.lecture = (await api.get('/api/lecture')).sort((a, b) => a.time - b.time)
     },
     methods: {
-      ...formatter
+      ...formatter,
+      click(url){
+        if(url){
+        android.openURLinBrowser(url)
+        }
+        
+      }
     }
   }
 
